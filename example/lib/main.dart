@@ -8,7 +8,7 @@ import 'package:call_screen_service/call_screen_service.dart';
 @pragma('vm:entry-point')
 Future<CallScreenResponse> receivedCall(String phone) {
   debugPrint("Ya!, received call from phone number: $phone");
-  return Future.value(CallScreenResponse(reject: true, disallow: true));
+  return Future.value(CallScreenResponse(reject: true));
 }
 
 void main() async {

@@ -39,8 +39,8 @@ open class CallScreenResult(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun respond(callScreenResponse: CallScreenResponse) {
         val builder = CallScreeningService.CallResponse.Builder()
-        builder.setSkipCallLog(callScreenResponse.skipCallLog)
-        builder.setDisallowCall(callScreenResponse.disallow)
+        builder.setSkipCallLog(false)
+        builder.setDisallowCall(callScreenResponse.reject)
         builder.setSilenceCall(callScreenResponse.silence)
         builder.setRejectCall(callScreenResponse.reject)
         builder.setSkipNotification(callScreenResponse.skipNotification)

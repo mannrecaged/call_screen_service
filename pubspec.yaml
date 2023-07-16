@@ -1,10 +1,10 @@
 name: call_screen_service
-description: A new flutter plugin project.
+description: A service for android CallScreenService api
 version: 0.0.1
-homepage:
+homepage: https://github.com/mannrecaged/call_screen_service
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.16.0 <4.0.0"
   flutter: ">=2.5.0"
 
 dependencies:

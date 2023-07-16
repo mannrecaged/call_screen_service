@@ -5,10 +5,11 @@ import 'package:call_screen_service/call_screen_response.dart';
 import 'package:call_screen_service/src/callback_dispatcher.dart';
 import 'package:flutter/services.dart';
 
-const foregroundChannelName = "CallScreenServicePlugin.call_screen_foreground_channel";
+import 'call_screen_info.dart';
+
+const foregroundChannelName =
+    "CallScreenServicePlugin.call_screen_foreground_channel";
 const initializeServiceMethod = "CallScreenServicePlugin.initializeService";
-
-
 
 class CallScreenService {
   // static const String userCallbackHandleKey = "userCallbackHandleKey";
@@ -33,7 +34,8 @@ class CallScreenService {
   // }
 
   static Future<void> initialise(
-      Future<CallScreenResponse> Function(String phone)? userCallback) async {
+      Future<CallScreenResponse> Function(CallScreenInfo callScreenInfo)?
+          userCallback) async {
     if (userCallback == null) {
       throw Exception("callback should be provided");
     }

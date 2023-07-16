@@ -1,3 +1,4 @@
+import 'package:call_screen_service/call_screen_info.dart';
 import 'package:call_screen_service/call_screen_response.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -6,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:call_screen_service/call_screen_service.dart';
 
 @pragma('vm:entry-point')
-Future<CallScreenResponse> receivedCall(String phone) {
-  debugPrint("Ya!, received call from phone number: $phone");
+Future<CallScreenResponse> receivedCall(CallScreenInfo info) {
+  debugPrint("Ya!, received call from phone number: ${info.phone}");
   return Future.value(CallScreenResponse(reject: true));
 }
 

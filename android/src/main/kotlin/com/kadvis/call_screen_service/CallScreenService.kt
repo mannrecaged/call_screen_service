@@ -7,6 +7,7 @@ import android.telecom.Call.Details
 import android.telecom.CallScreeningService
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.google.gson.Gson
 import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -24,6 +25,7 @@ class CallScreenService : CallScreeningService(), MethodChannel.MethodCallHandle
             "CallScreenServicePlugin.callScreenChannelBackground"
         const val METHOD_INITIALIZED = "CallScreenServicePlugin.initialized"
         const val METHOD_ON_SCREEN_CALL = "CallScreenServicePlugin.onScreenCall"
+        val gson = Gson()
     }
 
     private lateinit var backgroundChannel: MethodChannel
@@ -82,13 +84,20 @@ class CallScreenService : CallScreeningService(), MethodChannel.MethodCallHandle
         backgroundChannel.setMethodCallHandler(this)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun isIncomingAllowed(callDetails: Details) {
 
         Log.i(TAG, "ON screen call!")
 
         result = CallScreenResult(this, callDetails)
 
-        val args = arrayListOf<Any>(getUserCallback(), callDetails.handle.schemeSpecificPart)
+        val phone = callDetails.handle.schemeSpecificPart
+
+        val callScreenInfo = CallScreenInfo(phone, callDetails.callDirection)
+
+        val callScreenStr = gson.toJson(callScreenInfo)
+
+        val args = arrayListOf<Any>(getUserCallback(), callScreenStr)
         backgroundChannel.invokeMethod(
             METHOD_ON_SCREEN_CALL,
             args,

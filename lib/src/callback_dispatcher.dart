@@ -5,6 +5,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:call_screen_service/call_screen_info.dart';
 import 'package:call_screen_service/call_screen_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +34,15 @@ Future<void> callbackDispatcher() async {
     }
 
     final userCallbackRawHandle = arguments[0] as int;
-    final phone = arguments[1] as String;
+    final callScreenInfoStr = arguments[1] as String;
+
+    if (callScreenInfoStr.isEmpty) {
+      return;
+    }
+
+    final callScreenInfo =
+        CallScreenInfo.fromJson(json.decode(callScreenInfoStr));
+
     //
     // final List<dynamic> args = call.arguments;
     final Function? callback = PluginUtilities.getCallbackFromHandle(
@@ -43,7 +52,7 @@ Future<void> callbackDispatcher() async {
       return;
     }
 
-    final CallScreenResponse response = await callback(phone);
+    final CallScreenResponse response = await callback(callScreenInfo);
     final jsonStr = json.encode(response.toJson());
     return Future.value(jsonStr);
 

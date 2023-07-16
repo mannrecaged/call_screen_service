@@ -9,10 +9,10 @@
 <!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
 <!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+<!--    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />-->
+<!--    <uses-permission android:name="android.permission.CALL_PHONE" />-->
+<!--    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />-->
 
 
     <application
@@ -47,14 +47,14 @@
             android:value="2" />
 
 
-       <service
-           android:name="com.kadvis.call_screen_service.CallScreenService"
-           android:exported="true"
-           android:permission="android.permission.BIND_SCREENING_SERVICE">
-           <intent-filter>
-               <action android:name="android.telecom.CallScreeningService" />
-           </intent-filter>
-       </service>
+<!--       <service-->
+<!--           android:name="com.kadvis.call_screen_service.CallScreenService"-->
+<!--           android:exported="true"-->
+<!--           android:permission="android.permission.BIND_SCREENING_SERVICE">-->
+<!--           <intent-filter>-->
+<!--               <action android:name="android.telecom.CallScreeningService" />-->
+<!--           </intent-filter>-->
+<!--       </service>-->
 
    </application>
 </manifest>

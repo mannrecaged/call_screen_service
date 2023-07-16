@@ -1,3 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.kadvis.call_screen_service">
+    package="com.kadvis.call_screen_service">
+
+<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+<!--    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />-->
+<!--    <uses-permission android:name="android.permission.CALL_PHONE" />-->
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+
+    <application>
+        <service
+            android:name="com.kadvis.call_screen_service.CallScreenService"
+            android:exported="true"
+            android:permission="android.permission.BIND_SCREENING_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.CallScreeningService" />
+            </intent-filter>
+        </service>
+    </application>
+
 </manifest>

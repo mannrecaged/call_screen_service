@@ -18,8 +18,8 @@ const initializedMethodName = "CallScreenServicePlugin.initialized";
 @pragma('vm:entry-point')
 Future<void> callbackDispatcher() async {
   debugPrint("callback dispatches inside");
-  const MethodChannel _backgroundChannel = MethodChannel(backgroundChannelName);
   WidgetsFlutterBinding.ensureInitialized();
+  const MethodChannel _backgroundChannel = MethodChannel(backgroundChannelName);
 
   _backgroundChannel.setMethodCallHandler((MethodCall call) async {
     debugPrint("call from native. received at flutter");

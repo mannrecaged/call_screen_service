@@ -19,6 +19,8 @@ const initializedMethodName = "CallScreenServicePlugin.initialized";
 Future<void> callbackDispatcher() async {
   debugPrint("callback dispatches inside");
   WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+
   const MethodChannel _backgroundChannel = MethodChannel(backgroundChannelName);
 
   _backgroundChannel.setMethodCallHandler((MethodCall call) async {

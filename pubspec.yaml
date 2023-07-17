@@ -1,6 +1,6 @@
 name: call_screen_service
 description: A service for android CallScreenService api
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/mannrecaged/call_screen_service
 
 environment:

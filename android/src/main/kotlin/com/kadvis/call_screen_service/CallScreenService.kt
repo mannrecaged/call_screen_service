@@ -38,14 +38,13 @@ class CallScreenService : CallScreeningService(), MethodChannel.MethodCallHandle
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onScreenCall(callDetails: Call.Details) {
-//        this.callDetails = callDetails
-        isIncomingAllowed(callDetails)
+        screenCall(callDetails)
     }
 
 
     private fun startCallScreenService() {
-//        backgroundChannelInitialized = false
         synchronized(lock) {
             if (flutterEngine == null) {
                 flutterEngine = FlutterEngine(this)
@@ -68,7 +67,7 @@ class CallScreenService : CallScreeningService(), MethodChannel.MethodCallHandle
             Log.e(TAG, "Fatal: failed to find callback")
             return
         }
-        Log.i(TAG, "Starting CallScreenService...")
+        Log.d(TAG, "Starting CallScreenService...")
 
         val dartCallback = DartExecutor.DartCallback(
             assets,
@@ -82,30 +81,8 @@ class CallScreenService : CallScreeningService(), MethodChannel.MethodCallHandle
             CALL_SCREEN_CHANNEL_BACKGROUND
         )
         backgroundChannel.setMethodCallHandler(this)
+        Log.d(TAG, "Started CallScreenService...")
     }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun isIncomingAllowed(callDetails: Details) {
-
-        Log.i(TAG, "ON screen call!")
-
-        result = CallScreenResult(this, callDetails)
-
-        val phone = callDetails.handle.schemeSpecificPart
-
-        val callScreenInfo = CallScreenInfo(phone, callDetails.callDirection)
-
-        val callScreenStr = gson.toJson(callScreenInfo)
-
-        val args = arrayListOf<Any>(getUserCallback(), callScreenStr)
-        backgroundChannel.invokeMethod(
-            METHOD_ON_SCREEN_CALL,
-            args,
-            result
-        )
-        Log.i(TAG, "Invoked platofmr method: $METHOD_ON_SCREEN_CALL")
-    }
-
 
     private fun getUserCallback(): Long {
 
@@ -117,23 +94,30 @@ class CallScreenService : CallScreeningService(), MethodChannel.MethodCallHandle
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-
             METHOD_INITIALIZED -> {
-                Log.i(TAG, "Dart initialised successfully")
+                Log.d(TAG, "Dart initialised successfully")
                 result.success(true)
             }
-
             else -> result.notImplemented()
-
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        backgroundChannel.setMethodCallHandler(null)
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun screenCall(callDetails: Details) {
+        result = CallScreenResult(this, callDetails)
+        val phone = callDetails.handle.schemeSpecificPart
+        Log.i(TAG, "Screening call from: $phone")
+        val callScreenInfo = CallScreenInfo(phone, callDetails.callDirection)
+        val callScreenStr = gson.toJson(callScreenInfo)
+        val args = arrayListOf<Any>(getUserCallback(), callScreenStr)
+        backgroundChannel.invokeMethod(
+            METHOD_ON_SCREEN_CALL,
+            args,
+            result
+        )
+        Log.d(TAG, "Invoked platform method: $METHOD_ON_SCREEN_CALL")
     }
-
-
 }

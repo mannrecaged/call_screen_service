@@ -20,20 +20,20 @@ open class CallScreenResult(
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun success(result: Any?) {
-        Log.i(TAG, "DefaultMethodResult.success. result: $result")
+        Log.d(TAG, "DefaultMethodResult.success. result: $result")
 
         if (result == null) {
             return
         }
 
         if (result !is String) {
-            Log.i(TAG,"It nso a sting. result: $result")
+            Log.d(TAG,"It not a string. result: $result")
             return
         }
 
         val callScreenResponse = gson.fromJson(result, CallScreenResponse::class.java)
-        Log.i(TAG,"call screen response from futter: $callScreenResponse")
         respond(callScreenResponse)
+        Log.i(TAG,"call screen responded: $callScreenResponse")
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

@@ -15,6 +15,7 @@ const backgroundChannelName =
 
 const initializedMethodName = "CallScreenServicePlugin.initialized";
 
+
 @pragma('vm:entry-point')
 Future<void> callbackDispatcher() async {
   debugPrint("callback dispatches inside");
@@ -22,55 +23,42 @@ Future<void> callbackDispatcher() async {
   DartPluginRegistrant.ensureInitialized();
 
   const MethodChannel _backgroundChannel = MethodChannel(backgroundChannelName);
-
-  _backgroundChannel.setMethodCallHandler((MethodCall call) async {
-    debugPrint("call from native. received at flutter");
-
-    debugPrint("Call details: ${call.arguments}");
-
-    final arguments = call.arguments as List<Object?>?;
-
-    if (arguments == null) {
-      debugPrint("Arguments are null. value: $arguments");
-      return;
-    }
-
-    final userCallbackRawHandle = arguments[0] as int;
-    final callScreenInfoStr = arguments[1] as String;
-
-    if (callScreenInfoStr.isEmpty) {
-      return;
-    }
-
-    final callScreenInfo =
-        CallScreenInfo.fromJson(json.decode(callScreenInfoStr));
-
-    //
-    // final List<dynamic> args = call.arguments;
-    final Function? callback = PluginUtilities.getCallbackFromHandle(
-        CallbackHandle.fromRawHandle(userCallbackRawHandle));
-    if (callback == null) {
-      debugPrint("No callback found");
-      return;
-    }
-
-    final CallScreenResponse response = await callback(callScreenInfo);
-    final jsonStr = json.encode(response.toJson());
-    return Future.value(jsonStr);
-
-    // assert(callback != null);
-    // final List<String> triggeringGeofences = args[1].cast<String>();
-    // final List<double> locationList = <double>[];
-    // // 0.0 becomes 0 somewhere during the method call, resulting in wrong
-    // // runtime type (int instead of double). This is a simple way to get
-    // // around casting in another complicated manner.
-    // args[2]
-    //     .forEach((dynamic e) => locationList.add(double.parse(e.toString())));
-    // final Location triggeringLocation = locationFromList(locationList);
-    // final GeofenceEvent event = intToGeofenceEvent(args[3]);
-    // callback!(triggeringGeofences, triggeringLocation, event);1
-  });
+  _backgroundChannel.setMethodCallHandler(platformMethodCall);
   debugPrint("before background flutter/dart initialized");
   await _backgroundChannel.invokeMethod(initializedMethodName);
   debugPrint("after background flutter/dart initialized");
+}
+
+Future<dynamic> platformMethodCall(MethodCall call) async {
+  debugPrint("call from native. received at flutter");
+
+  debugPrint("Call details: ${call.arguments}");
+
+  final arguments = call.arguments as List<Object?>?;
+
+  if (arguments == null) {
+    debugPrint("Arguments are null. value: $arguments");
+    return;
+  }
+
+  final userCallbackRawHandle = arguments[0] as int;
+  final callScreenInfoStr = arguments[1] as String;
+
+  if (callScreenInfoStr.isEmpty) {
+    return;
+  }
+
+  final callScreenInfo =
+  CallScreenInfo.fromJson(json.decode(callScreenInfoStr));
+
+  final Function? callback = PluginUtilities.getCallbackFromHandle(
+      CallbackHandle.fromRawHandle(userCallbackRawHandle));
+  if (callback == null) {
+    debugPrint("No callback found");
+    return;
+  }
+
+  final CallScreenResponse response = await callback(callScreenInfo);
+  final jsonStr = json.encode(response.toJson());
+  return Future.value(jsonStr);
 }

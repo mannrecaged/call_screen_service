@@ -12,8 +12,6 @@ const foregroundChannelName =
 const initializeServiceMethod = "CallScreenServicePlugin.initializeService";
 
 class CallScreenService {
-  // static const String userCallbackHandleKey = "userCallbackHandleKey";
-
   static const MethodChannel _channel = MethodChannel(foregroundChannelName);
 
   static Future<String?> get platformVersion async {
@@ -21,30 +19,12 @@ class CallScreenService {
     return version;
   }
 
-  // static Future<void> _initializeService(
-  //     Function(String phone) callback) async {
-  //   final CallbackHandle? callback =
-  //       PluginUtilities.getCallbackHandle(callbackDispatcher);
-  //
-  //   final CallbackHandle? userCallback =
-  //       PluginUtilities.getCallbackHandle(callbackDispatcher);
-  //
-  //   await _channel.invokeMethod(
-  //       'initializeService', <dynamic>[callback?.toRawHandle(), userCallback]);
-  // }
-
   static Future<void> initialise(
       Future<CallScreenResponse> Function(CallScreenInfo callScreenInfo)?
           userCallback) async {
     if (userCallback == null) {
       throw Exception("callback should be provided");
     }
-    // // await _initializeService(callback);
-    // final handle = PluginUtilities.getCallbackHandle(userCallback);
-    //
-    // if(handle == null){
-    //   throw Exception("Invalid handle or its not available");
-    // }
     final CallbackHandle? callback =
         PluginUtilities.getCallbackHandle(callbackDispatcher);
 
